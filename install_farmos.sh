@@ -1,37 +1,66 @@
 #!/bin/bash
 
-### Installation of FarmOS 
+################################################################################
+# Script for the installation of FarmOS using Docker
+# Authors: Henry Robert Muwanika
 
-sudo apt-get update && sudo apt-get -y upgrade
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# Make a new file:
+# sudo nano install_farmos.sh
+# Place this content in it and then make the file executable:
+# sudo chmod +x install_farmos.sh
+# Execute the script to install FarmOS:
+# ./install_farmos.sh
+#
+################################################################################
+
+#----------------------------------------------------
+# Disable password authentication
+#----------------------------------------------------
+sudo sed -i 's/#ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config 
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo service sshd restart
+
+#--------------------------------------------------
+# Update Server
+#--------------------------------------------------
+echo -e "\n============= Update Server ================"
+sudo apt update
+sudo apt upgrade -y
+sudo apt autoremove -y
+
+#--------------------------------------------------
+### Installation of Docker
+#---------------------------------------------------
+sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add –
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get update
-sudo apt-cache policy docker-ce
-sudo apt-get install -y docker-ce 
+sudo apt update
+sudo apt install -y docker-ce 
+
 sudo systemctl enable docker
 sudo systemctl start docker
-sudo docker --version
 
+#-------------------------------------------------------------------------------------
+# Installation of Docker compose
+#-------------------------------------------------------------------------------------
 sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-docker-compose --version
 
 sudo mkdir farmOS
 cd farmOS
 wget https://raw.githubusercontent.com/farmOS/farmOS/7.x-1.x/docker/docker-compose.development.yml
-
 sudo cp docker-compose.development.yml docker-compose.yml
 sudo docker compose up
 
-# Visit the IP address in a browser - you should see the Drupal/farmOS installer.
+#----------------------------------------------------------------------------------------
+echo "################################################################################"
+echo "Visit the IP address in a browser - you should see the Drupal/farmOS installer"
+echo "Database name: farm"
+echo "Database username: farm"
+echo "Database password: farm"
+echo "Under "Advanced options", change "Database host" to: db"
+#----------------------------------------------------------------------------------------
 
-# Database setup
-# In the "Set up database" step of installation, use the following values:
-
-# Database name: farm
-# Database username: farm
-# Database password: farm
-# Under "Advanced options", change "Database host" to: db
-
-docker-compose start
-docker-compose stop
+# docker-compose start
+# docker-compose stop
