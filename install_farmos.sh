@@ -49,6 +49,7 @@ cd farmOS
 wget https://raw.githubusercontent.com/farmOS/farmOS/7.x-1.x/docker/docker-compose.development.yml
 wget https://raw.githubusercontent.com/farmOS/farmOS/7.x-1.x/docker/docker-compose.production.yml
 sudo cp docker-compose.development.yml docker-compose.yml
+#sudo cp docker-compose.production.yml docker-compose.yml
 sudo docker-compose up -d
 
 #----------------------------------------------------------------------------------------
@@ -59,6 +60,3 @@ echo "Database username: farm"
 echo "Database password: farm"
 echo "Under "Advanced options", change "Database host" to: db"
 #----------------------------------------------------------------------------------------
-
-# docker-compose start
-# docker-compose stop
