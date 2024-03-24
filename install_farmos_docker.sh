@@ -5,11 +5,11 @@
 # Authors: Henry Robert Muwanika
 
 # Make a new file:
-# sudo nano install_farmos.sh
+# sudo nano install_farmos_docker.sh
 # Place this content in it and then make the file executable:
-# sudo chmod +x install_farmos.sh
+# sudo chmod +x install_farmos_docker.sh
 # Execute the script to install FarmOS:
-# ./install_farmos.sh
+# ./install_farmos_docker.sh
 #
 ################################################################################
 
