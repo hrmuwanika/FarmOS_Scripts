@@ -59,7 +59,7 @@ sudo a2enmod mpm_prefork
 
 sudo systemctl restart apache2
 
-sudo mysql_secure_installation
+# sudo mysql_secure_installation
 
 sudo systemctl enable mariadb.service
 sudo systemctl start mariadb.service
@@ -77,7 +77,7 @@ sudo wget https://github.com/farmOS/farmOS/releases/download/3.1.2/farmOS-3.1.2.
 sudo tar -zxvf farmOS-3.1.2.tar.gz
 
 sudo mkdir /var/www/html/farmos
-cd farmos*
+cd farmOS
 cp -rf * /var/www/html/farmos
 
 sudo chown -R www-data:www-data /var/www/html/farmos
