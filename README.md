@@ -1,2 +1,2 @@
 # FarmOS
-Installation of FarmOS using Docker
+Installation of FarmOS 
