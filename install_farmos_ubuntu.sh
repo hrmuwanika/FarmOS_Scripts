@@ -10,7 +10,6 @@
 # sudo chmod +x install_farmos_ubuntu.sh
 # Execute the script to install FarmOS:
 # ./install_farmos_ubuntu.sh
-#
 
 #--------------------------------------------------
 # Update Server
@@ -34,16 +33,10 @@ sudo sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 sudo service sshd restart
 
-# Install mariadb databases
-sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
-sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] https://mariadb.mirror.liquidtelecom.com/repo/10.11/ubuntu jammy main'
-sudo apt update
-
 #--------------------------------------------------
-### Installation of LAMP
+###  Install PHP8.1
 #---------------------------------------------------
-# Install PHP8.1
-sudo apt install ca-certificates apt-transport-https software-properties-common -y
+sudo apt install -y ca-certificates apt-transport-https software-properties-common 
 sudo add-apt-repository ppa:ondrej/php  -y
 sudo apt update
 
@@ -57,9 +50,10 @@ echo -e "\n=============== Creating the ODOO PostgreSQL User ===================
 sudo -u postgres psql
 sudo -u postgres createdb farmdb
 sudo -u postgres createuser farm_user
-
-psql=# create user farm_user with encrypted password 'farmospass';
-psql=# grant all privileges on database farmdb to farm_user;
+sudo -u postgres ALTER user farm_user with encrypted password 'farmospass';
+sudo -u postgres ALTER DATABASE "farmdb" SET bytea_output = 'escape';
+sudo -u postgres grant all privileges on database farmdb to farm_user;
+sudo -u postgres \q
 
 # Install Apache2 and Php8.2
 sudo apt install -y apache2 libapache2-mod-php8.2 php8.2 php8.2-cli php8.2-pgsql php8.2-common php8.2-zip php8.2-bcmath \
