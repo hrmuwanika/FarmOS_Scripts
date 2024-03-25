@@ -47,8 +47,22 @@ sudo apt install ca-certificates apt-transport-https software-properties-common 
 sudo add-apt-repository ppa:ondrej/php  -y
 sudo apt update
 
-# Install LAMP Server
-sudo apt install -y apache2 mariadb-server mariadb-client libapache2-mod-php8.2 php8.2 php8.2-cli php8.2-mysql php8.2-common php8.2-zip \
+#--------------------------------------------------
+# Install PostgreSQL Server
+#--------------------------------------------------
+sudo apt install -y postgresql
+sudo systemctl start postgresql && sudo systemctl enable postgresql
+
+echo -e "\n=============== Creating the ODOO PostgreSQL User ========================="
+sudo -u postgres psql
+sudo -u postgres createdb farmdb
+sudo -u postgres createuser farm_user
+
+psql=# create user farm_user with encrypted password 'farmospass';
+psql=# grant all privileges on database farmdb to farm_user;
+
+# Install Apache2 and Php8.2
+sudo apt install -y apache2 libapache2-mod-php8.2 php8.2 php8.2-cli php8.2-pgsql php8.2-common php8.2-zip php8.2-bcmath \
 php8.2-mbstring php8.2-xmlrpc php8.2-curl php8.2-soap php8.2-gd php8.2-xml php8.2-intl php8.2-ldap php8.2-imap php8.2-opcache unzip 
 
 sudo systemctl enable apache2.service
@@ -58,11 +72,6 @@ sudo a2dismod mpm_event
 sudo a2enmod mpm_prefork
 
 sudo systemctl restart apache2
-
-# sudo mysql_secure_installation
-
-sudo systemctl enable mariadb.service
-sudo systemctl start mariadb.service
 
 #----------------------------------------------------------------------------------------
 # FarmOS Virtual host
@@ -91,14 +100,6 @@ a2enmod rewrite
 sudo systemctl reload apache2
 
 #----------------------------------------------------------------------------------------
-
-sudo mysql -u root << MYSQL_SCRIPT
-CREATE DATABASE farmdb;
-CREATE USER 'farm_user'@'localhost' IDENTIFIED BY 'm0d1fyth15';
-GRANT ALL PRIVILEGES ON farmdb.* TO 'farm_user'@'localhost';
-FLUSH PRIVILEGES;
-exit
-MYSQL_SCRIPT
 
 ufw allow 80/tcp
 ufw allow 443/tcp
