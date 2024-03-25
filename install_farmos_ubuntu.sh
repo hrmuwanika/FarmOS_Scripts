@@ -48,8 +48,8 @@ sudo add-apt-repository ppa:ondrej/php  -y
 sudo apt update
 
 # Install LAMP Server
-sudo apt install -y apache2 mariadb-server mariadb-client libapache2-mod-php8.1 php8.1 php8.1-cli php8.1-mysql php8.1-common php8.1-zip \
-php8.1-mbstring php8.1-xmlrpc php8.1-curl php8.1-soap php8.1-gd php8.1-xml php8.1-intl php8.1-ldap php8.1-imap php8.1-opcache unzip 
+sudo apt install -y apache2 mariadb-server mariadb-client libapache2-mod-php8.2 php8.2 php8.2-cli php8.2-mysql php8.2-common php8.2-zip \
+php8.2-mbstring php8.2-xmlrpc php8.2-curl php8.2-soap php8.2-gd php8.2-xml php8.2-intl php8.2-ldap php8.2-imap php8.2-opcache unzip 
 
 sudo systemctl enable apache2.service
 sudo systemctl start apache2.service
