@@ -55,9 +55,9 @@ sudo apt install -y docker-compose
 # FarmOS Production
 #----------------------------------------------------------------------------------------
 cd /usr/src/
-git clone https://github.com/farmOS/farmOS.git
+git clone https://github.com/hrmuwanika/farmOS.git
 cd farmOS/docker
-sudo cp docker-compose.production.yml docker-compose.yml
+sudo cp docker-compose.development.yml docker-compose.yml
 sudo docker-compose up -d
 #----------------------------------------------------------------------------------------
 
