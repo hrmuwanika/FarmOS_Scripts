@@ -128,23 +128,21 @@ sudo systemctl restart mariadb.service
 
 echo "
 #--------------------------------------------------
-# Drupal installation
+# FarmOS installation
 #--------------------------------------------------"
-cd /opt && wget https://ftp.drupal.org/files/projects/drupal-11.3.9.tar.gz 
-tar -zxvf drupal-11.3.9.tar.gz
-
 mkdir /var/www/drupal
-sudo cp -rf drupal-11.3.9/* /var/www/drupal
-sudo chown -R www-data:www-data /var/www/drupal/
-sudo chmod -R 755 /var/www/drupal/
+composer create-project farmos/project:4.x-dev farmos
 
-sudo cat <<EOF > /etc/nginx/sites-available/drupal.conf
+sudo chown -R www-data:www-data /var/www/farmos/
+sudo chmod -R 755 /var/www/farmos/
+
+sudo cat <<EOF > /etc/nginx/sites-available/farmos.conf
 server {
     listen 80;
     listen [::]:80;
     server_name _;
 
-    root /var/www/drupal;
+    root /var/www/farmos;
     index index.php index.html index.htm;
 
     location / {
@@ -166,15 +164,12 @@ EOF
 
 sudo rm /etc/nginx/sites-available/default
 sudo rm /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/drupal.conf /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/farmos.conf /etc/nginx/sites-enabled/
 
 nginx -t
 
 sudo systemctl restart nginx.service
 sudo systemctl restart php8.4-fpm
-
-sudo chmod 644 /var/www/drupal/sites/default/settings.php
-# sudo chmod 444 /var/www/drupal/sites/default/settings.php
 
 echo "
 #--------------------------------------------------
@@ -214,12 +209,5 @@ sudo ufw allow 443/tcp
 sudo ufw --force enable
 sudo ufw reload
 
-# nano /var/www/drupal/sites/default/settings.php <<EOF
-# $settings['trusted_host_patterns'] = ['192\.168\.1\.13'];
-
-echo "Drupal setup completed successfully."
-
-# cd /var/www/drupal/
-# composer create-project drupal/cms
-
+echo "FarmOS setup completed successfully."
 
