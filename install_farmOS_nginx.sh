@@ -119,9 +119,9 @@ sudo systemctl enable mariadb.service
 
 sudo systemctl restart mariadb.service
 
-sudo mariadb -uroot --password="" -e "CREATE DATABASE drupal_db;"
-sudo mariadb -uroot --password="" -e "CREATE USER 'dbadmin'@'localhost' IDENTIFIED BY 'abc1234@';"
-sudo mariadb -uroot --password="" -e "GRANT ALL ON drupal_db.* TO dbadmin@localhost WITH GRANT OPTION;"
+sudo mariadb -uroot --password="" -e "CREATE DATABASE farmos_db;"
+sudo mariadb -uroot --password="" -e "CREATE USER 'farmos_user'@'localhost' IDENTIFIED BY 'abc1234@';"
+sudo mariadb -uroot --password="" -e "GRANT ALL ON farmos_db.* TO farmos_user@localhost WITH GRANT OPTION;"
 sudo mariadb -uroot --password="" -e "FLUSH PRIVILEGES;"
 
 sudo systemctl restart mariadb.service
@@ -130,8 +130,9 @@ echo "
 #--------------------------------------------------
 # FarmOS installation
 #--------------------------------------------------"
-mkdir /var/www/drupal
-composer create-project farmos/project:4.x-dev farmos
+sudo composer create-project farmos/farmos-project farmos --no-dev
+sudo composer update --no-dev
+sudo composer update --no-dev
 
 sudo chown -R www-data:www-data /var/www/farmos/
 sudo chmod -R 755 /var/www/farmos/
@@ -142,11 +143,13 @@ server {
     listen [::]:80;
     server_name _;
 
-    root /var/www/farmos;
+    root /var/www/farmos/web;
     index index.php index.html index.htm;
 
+    client_max_body_size 64M;
+
     location / {
-        try_files \$uri \$uri/ /index.php?\$args;
+        try_files \$uri \$uri/ /index.php?\$query_string;
     }
 
     location ~ \.php$ {
@@ -167,7 +170,6 @@ sudo rm /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/farmos.conf /etc/nginx/sites-enabled/
 
 nginx -t
-
 sudo systemctl restart nginx.service
 sudo systemctl restart php8.4-fpm
 
