@@ -130,7 +130,7 @@ echo "
 #--------------------------------------------------
 # FarmOS installation
 #--------------------------------------------------"
-sudo composer create-project farmos/farmos-project farmos --no-dev
+sudo composer create-project farmos/project:4.x-dev farmos --no-dev
 sudo composer update --no-dev
 sudo composer update --no-dev
 
